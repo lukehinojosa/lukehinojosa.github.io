@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luke Hinojosa</title>
+<meta name="description" content="Luke Hinojosa: C++ systems and game programmer. Real-time netcode, air-defense simulation, and an open-source Minecraft mod with 80,000+ downloads.">
+<meta property="og:title" content="Luke Hinojosa">
+<meta property="og:description" content="Real-time systems, built from scratch.">
+<meta property="og:image" content="media/ds_salvo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Sofia+Sans:wght@400;500;700&family=Sofia+Sans+Semi+Condensed:wght@600;700;800&family=Martian+Mono:wdth,wght@75..112.5,400..600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Luke Hinojosa, back to top">
+      <span class="brand-mark">LH</span>
+      <span class="brand-name">Luke Hinojosa</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a class="hide-sm" href="#contact">Contact</a>
+      <button class="btn" type="button" data-resume="view">Résumé</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="crt">
+      <canvas class="hero-race" aria-hidden="true"></canvas>
+      <span class="status"><i></i>Seeking a Summer 2027 internship in game or defense engineering</span>
+      <h1>Real-time systems, built from <em>scratch</em>.</h1>
+      <p class="hero-lead">I'm Luke Hinojosa, a C++ systems and game programmer at Champlain College. I work on the parts that have to be fast, deterministic, and correct: netcode that keeps two players in sync through a full second of lag, an air-defense simulation that updates 10,000 tracks in under half a millisecond, and a Minecraft mod with more than <span data-live="total-floor">80,000</span> downloads.</p>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href="#projects">See the projects</a>
+        <a class="btn" href="mailto:lumahi@proton.me">lumahi@proton.me</a>
+        <div class="hero-links">
+          <a href="https://github.com/lukehinojosa" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/lukehinojosa/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+
+      <div class="readout" role="list">
+        <div role="listitem">
+          <b>0.44<small>ms</small></b>
+          <span>per frame to update and re-index 10,000 tracks</span>
+          <span class="label">Defense Simulation</span>
+        </div>
+        <div role="listitem">
+          <b>484,564</b>
+          <span>real Manhattan buildings rendered at 60 FPS</span>
+          <span class="label">Defense Simulation</span>
+        </div>
+        <div role="listitem">
+          <b>1,000<small>ms</small></b>
+          <span>round-trip latency survived without a desync</span>
+          <span class="label">Schrödinger's Pong</span>
+        </div>
+        <div role="listitem">
+          <b data-live="total">80,821</b>
+          <span>downloads across Modrinth and CurseForge</span>
+          <span class="label">Simple AutoPickup</span>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Most of what I build starts with a question about time.</h2>
+      </div>
+      <div class="about-grid">
+        <div class="prose">
+          <p>How do two players on different machines agree on where a ball is when every message arrives late? How many objects can an engine move, index, and publish inside a 16.7 ms frame, and how much of that budget is left over? I like the layer under the gameplay: the simulation loop, the wire format, the cache line.</p>
+          <p>I'm studying Game Programming at Champlain College in Burlington, Vermont. In spring 2025 I interned in the Security Operations Center at the Leahy Center for Digital Forensics &amp; Cybersecurity, where I assembled an Elastic Stack from scratch for network log aggregation and wrote up troubleshooting procedures for the rest of the team. That habit stuck. My repositories ship with design notes, profiling tables, and unit tests next to the code.</p>
+          <p>Outside the three projects below, I'm driving a mecanum robot from a Meta Quest 2 over a custom UDP protocol with stereo camera passthrough, building GOAP planners and A* pathfinding in Unity, and working through Game Physics and AI for Games this fall.</p>
+          <p>I'm looking for a summer internship on a team where real-time performance matters, whether that's a game studio or a defense program.</p>
+        </div>
+        <dl class="spec">
+          <div><dt>Education</dt><dd>B.S. Game Programming, Champlain College<small>Expected May 2028</small></dd></div>
+          <div><dt>Honors</dt><dd>Trustees' List &amp; President's List, multiple semesters<small>Dean's List, Fall 2025</small></dd></div>
+          <div><dt>Experience</dt><dd>Security Operations Intern, Leahy Center for Digital Forensics &amp; Cybersecurity<small>Feb 2025 to May 2025</small></dd></div>
+          <div><dt>Languages</dt><dd>C++17/20, C#, Java, Python, SQL, TypeScript</dd></div>
+          <div><dt>Systems</dt><dd>Shared memory (Boost.Interprocess), lock-free seqlocks, TCP/UDP sockets (Winsock, POSIX), WebSockets, WebAssembly</dd></div>
+          <div><dt>Graphics</dt><dd>Raylib, OpenGL, GPU instancing, Unity, octrees, 3D vector math</dd></div>
+          <div><dt>Tooling</dt><dd>CMake, GoogleTest, Valgrind, perf, GDB, Docker, Git, Jira, Elastic Stack</dd></div>
+          <div><dt>Coursework</dt><dd>Linear Algebra, Data Structures &amp; Algorithms, Network Programming, Game Architecture, Software Architecture Patterns</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section class="section" id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Three projects, each measured.</h2>
+        <p>Every claim below comes from a benchmark, a test suite, or a download counter. The demos run live in your browser, rebuilt from the same logic as the originals.</p>
+      </div>
+      <ul class="index">
+        <li><a href="#defense"><strong>Defense Simulation</strong><span>Air-defense engine, ProNav guidance, and a 3D command-and-control display</span><em>C++17 · Raylib · Boost</em></a></li>
+        <li><a href="#pong"><strong>Schrödinger's Pong</strong><span>Cross-platform multiplayer that hides a full second of latency</span><em>C++20 · WASM · WebSockets</em></a></li>
+        <li><a href="#autopickup"><strong>Simple AutoPickup</strong><span>A live open-source mod with <span data-live="total-floor">80,000</span>+ downloads across <span data-live="versions">23</span> game versions</span><em>Java · Mixin · Gradle</em></a></li>
+      </ul>
+    </div>
+
+    <!-- ---------- DEFENSE SIMULATION ---------- -->
+    <article class="project" id="defense">
+      <div class="wrap project-grid">
+        <aside class="rail">
+          <dl>
+            <div><dt>Role</dt><dd>Systems programmer, solo</dd></div>
+            <div><dt>Timeline</dt><dd>August 2026</dd></div>
+            <div><dt>Stack</dt><dd>C++17, CMake, Raylib, Boost.Interprocess, GoogleTest</dd></div>
+            <div><dt>Runs on</dt><dd>Windows (MSVC) and Linux, profiled on a Raspberry Pi 4</dd></div>
+          </dl>
+          <div class="links">
+            <a href="https://github.com/lukehinojosa/DefenseSimulation" target="_blank" rel="noopener">Source on GitHub</a>
+          </div>
+        </aside>
+
+        <div class="project-main">
+          <div class="label kicker">Real-Time Air Defense &amp; Telemetry Suite</div>
+          <h3>Defense Simulation</h3>
+          <p class="summary">A multithreaded engine that tracks hostile missiles, assigns interceptors, and guides them in with Proportional Navigation, then streams every frame to a separate 3D command-and-control display built on a real 1:1 map of Midtown Manhattan.</p>
+
+          <div class="screen" data-tabs>
+            <div class="screen-bar">
+              <span>C2 TACTICAL DISPLAY</span>
+              <div class="tabs" role="tablist" aria-label="Defense Simulation views">
+                <button class="tab" role="tab" aria-selected="true" data-tab="ds-salvo">Salvo</button>
+                <button class="tab" role="tab" aria-selected="false" data-tab="ds-manhattan">Manhattan</button>
+                <button class="tab" role="tab" aria-selected="false" data-tab="ds-lod">LOD tuner</button>
+                <button class="tab" role="tab" aria-selected="false" data-tab="ds-pronav">Guidance demo</button>
+              </div>
+            </div>
+            <div class="panel" data-panel="ds-salvo">
+              <div class="stage"><img src="media/ds_salvo.webp" alt="C2 visualizer during a 100-threat raid: green ProNav line-of-sight lines connect interceptors to hostile missiles above the Manhattan skyline, with a HUD showing 97 active hostiles and 60 FPS." width="1280" height="720"></div>
+              <div class="screen-foot"><span><strong>100-threat raid, 14 s in.</strong> Green lines are ProNav line-of-sight from each interceptor to its assigned hostile. HUD reads live telemetry rate and throughput.</span></div>
+            </div>
+            <div class="panel" data-panel="ds-manhattan" hidden>
+              <div class="stage"><img src="media/ds_manhattan.webp" alt="Close view of Midtown Manhattan extruded from OpenStreetMap building footprints at real heights, with the East River in blue and the UN Secretariat marked." width="1280" height="720" loading="lazy"></div>
+              <div class="screen-foot"><span><strong>The defended asset: the UN Secretariat.</strong> Buildings extruded from OpenStreetMap footprints at their real heights, drawn with instanced meshes in one call per building class.</span></div>
+            </div>
+            <div class="panel" data-panel="ds-lod" hidden>
+              <div class="stage"><img src="media/ds_lodtuner.webp" alt="Wide view of New York City in the visualizer with an in-app LOD tuner panel showing distance and grid-size sliders for seven detail tiers." width="1280" height="720" loading="lazy"></div>
+              <div class="screen-foot"><span><strong>In-app LOD tuner.</strong> A debug panel I built to tune seven level-of-detail tiers live while holding 60 FPS across the whole metro.</span></div>
+            </div>
+            <div class="panel" data-panel="ds-pronav" hidden>
+              <div class="stage"><canvas id="pronav-canvas" width="1280" height="720" aria-label="Interactive top-down intercept demo. Click the map to launch a threat from that point."></canvas></div>
+              <div class="screen-foot">
+                <div class="controls">
+                  <div class="seg" role="group" aria-label="Guidance law">
+                    <button type="button" id="pn-mode-pronav" aria-pressed="true">ProNav</button>
+                    <button type="button" id="pn-mode-pursuit" aria-pressed="false">Pure pursuit</button>
+                  </div>
+                  <label class="ctl" for="pn-gain">N <input id="pn-gain" type="range" min="2" max="6" step="0.5" value="4"><output id="pn-gain-out" for="pn-gain">4.0</output></label>
+                  <button type="button" class="sbtn" id="pn-new">New threat</button>
+                </div>
+                <span class="hint">Click the map to launch a threat from there. Faint trails show the previous run.</span>
+              </div>
+            </div>
+          </div>
+          <p class="note">The guidance demo is a 2D sketch of the engine's guidance law using the scenario's own numbers: 950 m/s threats weaving at 12 g, 1,300 m/s interceptors limited to 55 g, a 20 m swept proximity fuze.</p>
+
+          <div class="body-grid">
+            <ul class="built">
+              <li><b>Proportional Navigation with real airframe limits.</b><span>The command a = N·(V<sub>r</sub> × Ω) is capped at the interceptor's G-limit and thrust, so rounds arc through turns instead of pivoting. Convergence is tested against crossing, inbound, and weaving targets for N = 3, 4, and 5.</span></li>
+              <li><b>An octree that rebuilds 60 times a second without touching the allocator.</b><span>Nodes live in one contiguous pool and reset instead of freeing. Profiling on a Pi 4 showed allocator churn was the real cost; pooling cut frame time from 12.3 ms to 6.0 ms and L1 cache misses by 44%.</span></li>
+              <li><b>A swept proximity fuze.</b><span>At Mach 3 closing speeds a round moves about 30 m per frame, so a point check tunnels straight through the target. The fuze tests closest approach across the whole step.</span></li>
+              <li><b>Two telemetry transports behind one interface.</b><span>Locally, a lock-free seqlock ring in shared memory with zero allocation on publish. Remotely, UDP with a zig-zag + VLQ codec that shrinks a 30 B record to about 12 to 15 B, so the entire scene fits in one datagram.</span></li>
+              <li><b>Engineered like it will be maintained.</b><span>CMake presets for MSVC and Linux, a data-driven YAML scenario, 61 GoogleTest cases, and a clean Valgrind report: 0 bytes in use at exit.</span></li>
+            </ul>
+            <dl class="metrics">
+              <div><dt>Frame time, 10,000 entities</dt><dd>0.44<small>ms</small></dd></div>
+              <div><dt>Frame time, 50,000 entities</dt><dd>1.6<small>ms</small></dd></div>
+              <div><dt>Octree rebuild, pooled vs. linked (Pi 4)</dt><dd>2.05<small>× faster</small></dd></div>
+              <div><dt>Building instances at 60 FPS</dt><dd>484,564</dd></div>
+              <div><dt>Bytes per track on the wire</dt><dd>12 to 15<small>B</small></dd></div>
+              <div><dt>Unit tests / leaked bytes</dt><dd>61 / 0</dd></div>
+            </dl>
+          </div>
+
+          <figure class="figure">
+            <span class="label">Architecture: one engine, decoupled consumers</span>
+            <div class="pipe">
+              <div class="node"><b>defense_sim</b><span>Thread pool kinematics at 60 Hz → octree index → ProNav guidance → engagement manager</span></div>
+              <div class="arrow" aria-hidden="true"><svg viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M0 6h20M15 1l5 5-5 5"/></svg></div>
+              <div class="stack">
+                <div class="node"><b>Shared memory</b><span>Seqlock ring buffer, zero-copy, local</span></div>
+                <div class="node"><b>UDP</b><span>Zig-zag + VLQ codec, remote over Tailscale</span></div>
+              </div>
+              <div class="arrow" aria-hidden="true"><svg viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M0 6h20M15 1l5 5-5 5"/></svg></div>
+              <div class="node"><b>ITelemetryConsumer</b><span>Transport-agnostic interface; one flag picks the source</span></div>
+              <div class="arrow" aria-hidden="true"><svg viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M0 6h20M15 1l5 5-5 5"/></svg></div>
+              <div class="stack">
+                <div class="node"><b>c2_visualizer</b><span>Raylib 3D display and HUD</span></div>
+                <div class="node"><b>telemetry_monitor</b><span>Console threat and rate readout</span></div>
+              </div>
+            </div>
+            <figcaption>Rendering and monitoring run in their own processes, so they add zero cost to the engine loop. The same visualizer binary reads a Pi's shared memory locally or a UDP stream on a Windows PC.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </article>
+
+    <!-- ---------- SCHRODINGER'S PONG ---------- -->
+    <article class="project" id="pong">
+      <div class="wrap project-grid">
+        <aside class="rail">
+          <dl>
+            <div><dt>Role</dt><dd>Lead systems &amp; network programmer</dd></div>
+            <div><dt>Timeline</dt><dd>March to June 2026, Network Programming</dd></div>
+            <div><dt>Stack</dt><dd>C++20, Emscripten (WASM), libdatachannel, Raylib, Docker</dd></div>
+            <div><dt>Ships as</dt><dd>Browser build, Windows, Linux Flatpak, arm64</dd></div>
+          </dl>
+          <div class="links">
+            <a href="https://lukarbonite.itch.io/schrodingers-pong" target="_blank" rel="noopener">Play on itch.io</a>
+            <a href="media/schrodingers-pong-writeup.pdf" target="_blank" rel="noopener">Read the write-up</a>
+            <a href="https://github.com/lukehinojosa/PongOnline" target="_blank" rel="noopener">Source on GitHub</a>
+          </div>
+        </aside>
+
+        <div class="project-main">
+          <div class="label kicker">Real-time multiplayer, no engine</div>
+          <h3>Schrödinger's Pong</h3>
+          <p class="summary">Pong is the simplest game there is, until two players are 500 ms apart. I wrote the networking from scratch in C++: a custom binary protocol, deterministic fixed-point physics shared by native and WebAssembly builds, and a prediction system where the ball splits into every possible future until the other player confirms which one happened.</p>
+
+          <div class="screen">
+            <div class="screen-bar">
+              <span>LIVE DEMO · YOU ARE THE GUEST (RIGHT PADDLE)</span>
+              <span id="pong-status">IN SYNC</span>
+            </div>
+            <div class="stage stage-pong"><canvas id="pong-canvas" width="1280" height="720" aria-label="Pong demo showing the Schrödinger ball splitting into yellow ghost timelines while awaiting the host's collision message."></canvas></div>
+            <div class="screen-foot">
+              <div class="controls">
+                <div class="seg" role="group" aria-label="Prediction mode">
+                  <button type="button" id="pong-mode-schro" aria-pressed="true">Schrödinger prediction</button>
+                  <button type="button" id="pong-mode-naive" aria-pressed="false">Wait for host</button>
+                </div>
+                <label class="ctl" for="pong-rtt">RTT <input id="pong-rtt" type="range" min="0" max="1000" step="50" value="500"><output id="pong-rtt-out" for="pong-rtt">500 ms</output></label>
+                <button type="button" class="sbtn" id="pong-pause">Pause</button>
+              </div>
+              <span class="hint" id="pong-log">AuthCollision log will appear here</span>
+            </div>
+          </div>
+          <p class="note">Watch the left paddle. When the ball reaches the remote host, it splits into miss, up, middle, and down timelines (yellow). The host's AuthCollision message arrives after half the RTT and collapses them. Switch to "Wait for host" to see the teleport this system removes.</p>
+
+          <div class="body-grid">
+            <ul class="built">
+              <li><b>Determinism by construction.</b><span>Floating point rounds differently across CPUs, compilers, and WebAssembly, and a one-frame difference snowballs into a desync. The simulation runs entirely in integers at 1/100 pixel, so native and browser clients compute identical trajectories.</span></li>
+              <li><b>Phase-locked tick pacing.</b><span>The guest estimates round-trip time continuously and nudges its simulation clock between 0.99× and 1.01× to track the host, snapping only during the countdown where a jump is invisible.</span></li>
+              <li><b>Distributed authority.</b><span>Each player is authoritative over their own paddle face, which eliminates ghost hits. The Schrödinger ball bridges the gap until the peer's verdict arrives.</span></li>
+              <li><b>Beating TCP head-of-line blocking.</b><span>WebSockets run over TCP, so one lost packet stalls everything behind it. Critical collision messages repeat for 30 consecutive frames instead of waiting on a retransmit.</span></li>
+              <li><b>Deployed, not just demoed.</b><span>A C++ signaling server brokers lobbies over JSON and then relays raw bytes without inspecting them. It ships in a multi-stage Docker image with automatic Let's Encrypt TLS.</span></li>
+            </ul>
+            <dl class="metrics">
+              <div><dt>Round-trip latency stress-tested</dt><dd>1,000<small>ms</small></dd></div>
+              <div><dt>Largest game-state packet</dt><dd>48<small>B</small></dd></div>
+              <div><dt>Clock drift correction</dt><dd>±1<small>%</small></dd></div>
+              <div><dt>Collision redundancy</dt><dd>30<small>frames</small></dd></div>
+              <div><dt>Fixed-point resolution</dt><dd>1/100<small>px</small></dd></div>
+              <div><dt>Simulation rate</dt><dd>60<small>Hz</small></dd></div>
+            </dl>
+          </div>
+
+          <figure class="figure">
+            <span class="label">Wire format: GameState packet</span>
+            <div class="wire-scroll">
+              <div class="wire" role="img" aria-label="GameState packet layout: message id, tick, delta mask, then optional fields for ball position and velocity, both paddles, score, and Schrödinger state. Maximum 48 bytes.">
+                <div class="hdr"><b>0x20</b><span>msg_id · 1 B</span></div>
+                <div class="hdr"><b>tick</b><span>VLQ · 1 to 5 B</span></div>
+                <div class="hdr"><b>dmask</b><span>bitfield · 1 B</span></div>
+                <div class="opt"><b>Δball_x</b><span>zz-VLQ</span></div>
+                <div class="opt"><b>Δball_y</b><span>zz-VLQ</span></div>
+                <div class="opt"><b>vx · vy</b><span>zz-VLQ</span></div>
+                <div class="opt"><b>Δpaddle A · B</b><span>zz-VLQ</span></div>
+                <div class="opt"><b>score</b><span>a&lt;&lt;4 | b</span></div>
+                <div class="opt"><b>schrödinger</b><span>flag + 6 fields</span></div>
+                <div class="hdr"><b>≤ 48 B</b><span>total</span></div>
+              </div>
+            </div>
+            <div class="encode">
+              <code>Δx = <b>−3</b> → zig-zag <b>5</b> → VLQ <b>05</b> <span>(1 byte)</span></code>
+              <code>Δx = <b>+130</b> → zig-zag <b>260</b> → VLQ <b>84 02</b> <span>(2 bytes)</span></code>
+            </div>
+            <figcaption>Only fields flagged in the delta mask are sent. Zig-zag encoding maps small negative deltas to small unsigned numbers so variable-length quantities can pack them into a single byte instead of four.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </article>
+
+    <!-- ---------- AUTOPICKUP ---------- -->
+    <article class="project" id="autopickup">
+      <div class="wrap project-grid">
+        <aside class="rail">
+          <dl>
+            <div><dt>Role</dt><dd>Creator and maintainer</dd></div>
+            <div><dt>Timeline</dt><dd>May 2025 to present, 16 months live</dd></div>
+            <div><dt>Stack</dt><dd>Java 17 to 25, SpongePowered Mixin, Fabric, Forge, NeoForge, Gradle, GitHub Actions</dd></div>
+            <div><dt>License</dt><dd>AGPL-3.0</dd></div>
+          </dl>
+          <div class="links">
+            <a href="https://modrinth.com/mod/simple-autopickup" target="_blank" rel="noopener">Modrinth</a>
+            <a href="https://www.curseforge.com/minecraft/mc-mods/simple-autopickup" target="_blank" rel="noopener">CurseForge</a>
+            <a href="https://github.com/Lukarbonite/AutoPickup" target="_blank" rel="noopener">Source on GitHub</a>
+          </div>
+        </aside>
+
+        <div class="project-main">
+          <div class="label kicker">Open-source tool with a live user base</div>
+          <h3>Simple AutoPickup</h3>
+          <p class="summary">Items and experience go straight into your inventory the moment you break a block or defeat a mob. Simple idea, hard to do right in someone else's engine: it has to credit the correct player, survive every mod that breaks blocks its own way, and keep working as Minecraft changes underneath it.</p>
+
+          <div class="screen" data-tabs>
+            <div class="screen-bar">
+              <span>IN GAME</span>
+              <div class="tabs" role="tablist" aria-label="AutoPickup clips">
+                <button class="tab" role="tab" aria-selected="true" data-tab="ap-multi">Vein mining</button>
+                <button class="tab" role="tab" aria-selected="false" data-tab="ap-one">Single block</button>
+                <button class="tab" role="tab" aria-selected="false" data-tab="ap-menu">Config menu</button>
+              </div>
+            </div>
+            <div class="panel" data-panel="ap-multi">
+              <div class="stage"><video src="media/ap_multi_block.mp4" poster="media/ap_multi_block.jpg" muted loop playsinline preload="metadata" aria-label="Mining a diamond ore vein; every drop goes directly into the hotbar."></video></div>
+              <div class="screen-foot"><span><strong>Chain mining.</strong> Every block in the vein is attributed back to the player who started it, with XP.</span></div>
+            </div>
+            <div class="panel" data-panel="ap-one" hidden>
+              <div class="stage"><video src="media/ap_one_block.mp4" poster="media/ap_one_block.jpg" muted loop playsinline preload="none" aria-label="Breaking a single block; the item appears in the inventory with no dropped entity."></video></div>
+              <div class="screen-foot"><span><strong>No item entities spawn.</strong> Drops skip the world entirely, which also lightens server load.</span></div>
+            </div>
+            <div class="panel" data-panel="ap-menu" hidden>
+              <div class="stage"><video src="media/ap_yacl_menu.mp4" poster="media/ap_yacl_menu.jpg" muted loop playsinline preload="none" aria-label="The in-game configuration menu with per-feature toggles."></video></div>
+              <div class="screen-foot"><span><strong>Per-player settings.</strong> Options the server doesn't allow are greyed out automatically.</span></div>
+            </div>
+          </div>
+
+          <div class="body-grid">
+            <ul class="built">
+              <li><b>One codebase, eleven builds.</b><span>A Gradle multi-project with a shared common module and thin per-version adapters produces jars for Fabric, Forge, and NeoForge across Minecraft 1.20 to 26.2, including the Java 25 unobfuscated releases.</span></li>
+              <li><b>Correct attribution through more than a dozen injection points.</b><span>Mixins track which break is "on the stack," so chain-miners and collapsing bamboo credit the player while automated farms running nearby are never siphoned into their inventory.</span></li>
+              <li><b>Game-feel details that players notice.</b><span>Experience is cached and applied after the tool takes durability damage, so Mending behaves exactly like vanilla. Mob loot and XP can be split evenly among everyone who landed a hit.</span></li>
+              <li><b>A three-tier permission model.</b><span>Server defaults, per-player admin overrides, and client preferences, synced through a hidden command channel that works across mismatched versions.</span></li>
+              <li><b>Maintained in public.</b><span>Bug reports from players drive the roadmap. All 25 GitHub issues are closed, and a public API lets other mods route rewards through AutoPickup.</span></li>
+            </ul>
+            <dl class="metrics">
+              <div><dt>Downloads, Modrinth</dt><dd data-live="modrinth">62,546</dd></div>
+              <div><dt>Downloads, CurseForge</dt><dd data-live="curseforge">18,275</dd></div>
+              <div><dt>Minecraft versions supported</dt><dd data-live="versions">23</dd></div>
+              <div><dt>Mod loaders</dt><dd data-live="loaders">3</dd></div>
+              <div><dt>GitHub issues closed</dt><dd>25 / 25</dd></div>
+              <div><dt>Latest full week, Modrinth</dt><dd data-live="latest-week">8,252</dd></div>
+            </dl>
+          </div>
+
+          <figure class="figure">
+            <span class="label">Weekly downloads on Modrinth</span>
+            <div class="chart-wrap"><div id="dl-chart"></div><div class="chart-tip" id="dl-tip" hidden></div></div>
+            <details class="table-view">
+              <summary>View as table</summary>
+              <div class="tv-scroll"><table id="dl-table"><thead><tr><th>Week of</th><th>Downloads</th></tr></thead><tbody></tbody></table></div>
+            </details>
+            <figcaption id="dl-caption">Weekly downloads from Modrinth analytics, full weeks through Sep 13, 2026. CurseForge downloads are not included here.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <h2>Let's talk about summer 2027.</h2>
+      <p>If your team builds games, simulations, or systems where timing is a feature, I'd like to hear about it. The fastest way to reach me is email.</p>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href="mailto:lumahi@proton.me">Email lumahi@proton.me</a>
+        <button class="btn" type="button" data-resume="download">Download résumé</button>
+        <div class="hero-links">
+          <a href="https://www.linkedin.com/in/lukehinojosa/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/lukehinojosa" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 Luke Hinojosa. Hand-built HTML, CSS, and canvas. No frameworks.</span>
+    <span>Map data © OpenStreetMap contributors, ODbL.</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="script.js"></script>
+</body>
+</html>

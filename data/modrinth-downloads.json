@@ -1,0 +1,280 @@
+{
+  "project": "simple-autopickup",
+  "project_id": "ycs4OjaI",
+  "bucket": "week",
+  "through": "2026-09-14",
+  "weeks": [
+    {
+      "start": "2025-05-26",
+      "downloads": 12
+    },
+    {
+      "start": "2025-06-02",
+      "downloads": 44
+    },
+    {
+      "start": "2025-06-09",
+      "downloads": 60
+    },
+    {
+      "start": "2025-06-16",
+      "downloads": 105
+    },
+    {
+      "start": "2025-06-23",
+      "downloads": 99
+    },
+    {
+      "start": "2025-06-30",
+      "downloads": 87
+    },
+    {
+      "start": "2025-07-07",
+      "downloads": 187
+    },
+    {
+      "start": "2025-07-14",
+      "downloads": 104
+    },
+    {
+      "start": "2025-07-21",
+      "downloads": 157
+    },
+    {
+      "start": "2025-07-28",
+      "downloads": 166
+    },
+    {
+      "start": "2025-08-04",
+      "downloads": 171
+    },
+    {
+      "start": "2025-08-11",
+      "downloads": 204
+    },
+    {
+      "start": "2025-08-18",
+      "downloads": 195
+    },
+    {
+      "start": "2025-08-25",
+      "downloads": 235
+    },
+    {
+      "start": "2025-09-01",
+      "downloads": 176
+    },
+    {
+      "start": "2025-09-08",
+      "downloads": 250
+    },
+    {
+      "start": "2025-09-15",
+      "downloads": 214
+    },
+    {
+      "start": "2025-09-22",
+      "downloads": 200
+    },
+    {
+      "start": "2025-09-29",
+      "downloads": 301
+    },
+    {
+      "start": "2025-10-06",
+      "downloads": 261
+    },
+    {
+      "start": "2025-10-13",
+      "downloads": 281
+    },
+    {
+      "start": "2025-10-20",
+      "downloads": 286
+    },
+    {
+      "start": "2025-10-27",
+      "downloads": 260
+    },
+    {
+      "start": "2025-11-03",
+      "downloads": 296
+    },
+    {
+      "start": "2025-11-10",
+      "downloads": 265
+    },
+    {
+      "start": "2025-11-17",
+      "downloads": 283
+    },
+    {
+      "start": "2025-11-24",
+      "downloads": 288
+    },
+    {
+      "start": "2025-12-01",
+      "downloads": 260
+    },
+    {
+      "start": "2025-12-08",
+      "downloads": 263
+    },
+    {
+      "start": "2025-12-15",
+      "downloads": 346
+    },
+    {
+      "start": "2025-12-22",
+      "downloads": 526
+    },
+    {
+      "start": "2025-12-29",
+      "downloads": 493
+    },
+    {
+      "start": "2026-01-05",
+      "downloads": 471
+    },
+    {
+      "start": "2026-01-12",
+      "downloads": 455
+    },
+    {
+      "start": "2026-01-19",
+      "downloads": 578
+    },
+    {
+      "start": "2026-01-26",
+      "downloads": 496
+    },
+    {
+      "start": "2026-02-02",
+      "downloads": 647
+    },
+    {
+      "start": "2026-02-09",
+      "downloads": 635
+    },
+    {
+      "start": "2026-02-16",
+      "downloads": 649
+    },
+    {
+      "start": "2026-02-23",
+      "downloads": 700
+    },
+    {
+      "start": "2026-03-02",
+      "downloads": 632
+    },
+    {
+      "start": "2026-03-09",
+      "downloads": 621
+    },
+    {
+      "start": "2026-03-16",
+      "downloads": 639
+    },
+    {
+      "start": "2026-03-23",
+      "downloads": 703
+    },
+    {
+      "start": "2026-03-30",
+      "downloads": 738
+    },
+    {
+      "start": "2026-04-06",
+      "downloads": 775
+    },
+    {
+      "start": "2026-04-13",
+      "downloads": 670
+    },
+    {
+      "start": "2026-04-20",
+      "downloads": 468
+    },
+    {
+      "start": "2026-04-27",
+      "downloads": 659
+    },
+    {
+      "start": "2026-05-04",
+      "downloads": 690
+    },
+    {
+      "start": "2026-05-11",
+      "downloads": 777
+    },
+    {
+      "start": "2026-05-18",
+      "downloads": 904
+    },
+    {
+      "start": "2026-05-25",
+      "downloads": 1178
+    },
+    {
+      "start": "2026-06-01",
+      "downloads": 1210
+    },
+    {
+      "start": "2026-06-08",
+      "downloads": 914
+    },
+    {
+      "start": "2026-06-15",
+      "downloads": 1209
+    },
+    {
+      "start": "2026-06-22",
+      "downloads": 1014
+    },
+    {
+      "start": "2026-06-29",
+      "downloads": 935
+    },
+    {
+      "start": "2026-07-06",
+      "downloads": 1055
+    },
+    {
+      "start": "2026-07-13",
+      "downloads": 1002
+    },
+    {
+      "start": "2026-07-20",
+      "downloads": 1233
+    },
+    {
+      "start": "2026-07-27",
+      "downloads": 1071
+    },
+    {
+      "start": "2026-08-03",
+      "downloads": 1211
+    },
+    {
+      "start": "2026-08-10",
+      "downloads": 1814
+    },
+    {
+      "start": "2026-08-17",
+      "downloads": 4364
+    },
+    {
+      "start": "2026-08-24",
+      "downloads": 6938
+    },
+    {
+      "start": "2026-08-31",
+      "downloads": 7468
+    },
+    {
+      "start": "2026-09-07",
+      "downloads": 8252
+    }
+  ]
+}
