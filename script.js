@@ -802,15 +802,25 @@
       return res.json();
     };
 
-    Promise.allSettled([getJson(MODRINTH), getJson(CURSEFORGE)]).then(([mr, cf]) => {
+    Promise.allSettled([getJson(MODRINTH), getJson(CURSEFORGE), getJson(`${MODRINTH}/version`)]).then(([mr, cf, rel]) => {
       const when = new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" });
       // Download counts only grow; never let a stale mirror show less than the page already does.
       let modrinth = shown("modrinth"), curse = shown("curseforge"), live = false;
       if (mr.status === "fulfilled" && Number.isFinite(mr.value.downloads)) {
         modrinth = Math.max(modrinth, mr.value.downloads); live = true;
         put("modrinth", fmt(modrinth), `Live from Modrinth, ${when}`);
-        if (Array.isArray(mr.value.game_versions) && mr.value.game_versions.length) put("versions", String(mr.value.game_versions.length), `Live from Modrinth, ${when}`);
-        if (Array.isArray(mr.value.loaders) && mr.value.loaders.length) put("loaders", String(mr.value.loaders.length), `Live from Modrinth, ${when}`);
+      }
+      // The project's own game_versions is the union of every release ever uploaded, including
+      // old Fabric-only builds (1.20.x, 1.21.2-8) that current releases no longer cover. Count only
+      // the builds of the newest mod version (the part of version_number before "+").
+      if (rel.status === "fulfilled" && Array.isArray(rel.value) && rel.value.length) {
+        const newest = rel.value.reduce((a, b) => (a.date_published > b.date_published ? a : b));
+        const current = rel.value.filter((v) => v.version_number.split("+")[0] === newest.version_number.split("+")[0]);
+        const games = new Set(current.flatMap((v) => v.game_versions || []));
+        const loaders = new Set(current.flatMap((v) => v.loaders || []));
+        const note = `Live from Modrinth, ${newest.version_number.split("+")[0]} builds, ${when}`;
+        if (games.size) put("versions", String(games.size), note);
+        if (loaders.size) put("loaders", String(loaders.size), note);
       }
       if (cf.status === "fulfilled" && Number.isFinite(cf.value?.downloads?.total)) {
         curse = Math.max(curse, cf.value.downloads.total); live = true;
