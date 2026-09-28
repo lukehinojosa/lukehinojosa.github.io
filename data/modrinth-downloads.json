@@ -2,7 +2,7 @@
   "project": "simple-autopickup",
   "project_id": "ycs4OjaI",
   "bucket": "week",
-  "through": "2026-09-21",
+  "through": "2026-09-28",
   "weeks": [
     {
       "start": "2025-05-26",
@@ -279,6 +279,10 @@
     {
       "start": "2026-09-14",
       "downloads": 7498
+    },
+    {
+      "start": "2026-09-21",
+      "downloads": 8590
     }
   ]
 }
