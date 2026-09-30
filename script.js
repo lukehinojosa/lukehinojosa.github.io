@@ -761,7 +761,9 @@
     const tbody = document.querySelector("#dl-table tbody");
     const caption = document.getElementById("dl-caption");
     const fmtDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-    const fillTable = () => { tbody.innerHTML = data.slice().reverse().map((p) => `<tr><td>${fmtDate(p.d)}</td><td>${p.v.toLocaleString()}</td></tr>`).join(""); };
+    // Each point: d (week start), v (Modrinth), and once data/curseforge-weekly.json loads, cf and est (CurseForge, estimated).
+    const cfText = (p) => (p.cf == null ? "n/a" : `${p.cf.toLocaleString()}${p.est ? " (est.)" : ""}`);
+    const fillTable = () => { tbody.innerHTML = data.slice().reverse().map((p) => `<tr><td>${fmtDate(p.d)}</td><td>${p.v.toLocaleString()}</td><td>${cfText(p)}</td></tr>`).join(""); };
     fillTable();
 
     const NS = "http://www.w3.org/2000/svg";
@@ -773,14 +775,19 @@
       const m = { t: 28, r: small ? 12 : 64, b: 30, l: 44 };
       const iw = W - m.l - m.r, ih = H - m.t - m.b;
       const t0 = data[0].d.getTime(), t1 = data[data.length - 1].d.getTime();
-      const peakValue = Math.max(...data.map((p) => p.v), 1);
+      const hasCf = data.some((p) => p.cf != null);
+      const peak = data.reduce((a, b) => (b.v > a.v ? b : a));
+      const cfPeak = hasCf ? data.reduce((a, b) => ((b.cf ?? 0) > (a.cf ?? 0) ? b : a)) : null;
+      const peakValue = Math.max(peak.v, cfPeak ? cfPeak.cf : 0, 1);
       const step = [500, 1000, 2000, 2500, 5000, 10000, 20000, 25000, 50000].find((s) => peakValue / s <= 5) ?? 100000;
       const yMax = Math.ceil((peakValue * 1.1) / step) * step;
       const X = (d) => m.l + ((d.getTime() - t0) / (t1 - t0)) * iw;
       const Y = (v) => m.t + ih - (v / yMax) * ih;
       host.innerHTML = "";
-      const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": `Line chart of weekly Modrinth downloads from ${fmtDate(data[0].d)} to ${fmtDate(data[data.length - 1].d)}, peaking at ${peakValue.toLocaleString()} a week.` }, host);
-      const ink = css("--legend"), muted = css("--legend-dim"), rule = "rgba(80, 170, 255, 0.14)", accent = css("--neon");
+      const label = `Line chart of weekly downloads from ${fmtDate(data[0].d)} to ${fmtDate(data[data.length - 1].d)}. Modrinth peaks at ${peak.v.toLocaleString()} a week` +
+        (cfPeak ? `; CurseForge, overlaid, peaks at ${cfPeak.cf.toLocaleString()}.` : ".");
+      const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": label }, host);
+      const ink = css("--legend"), muted = css("--legend-dim"), rule = "rgba(80, 170, 255, 0.14)", accent = css("--neon"), amber = css("--ghost");
 
       for (let v = 0; v <= yMax; v += step) {
         el("line", { x1: m.l, x2: m.l + iw, y1: Y(v), y2: Y(v), stroke: rule, "stroke-width": v === 0 ? 1.25 : 1 }, svg);
@@ -799,14 +806,38 @@
         t.textContent = showYear ? d.toLocaleDateString("en-US", { month: "short", year: "numeric" }) : d.toLocaleDateString("en-US", { month: "short" });
       });
 
-      const line = data.map((p, i) => `${i ? "L" : "M"}${X(p.d).toFixed(1)},${Y(p.v).toFixed(1)}`).join("");
-      el("path", { d: `${line}L${X(data[data.length - 1].d)},${Y(0)}L${X(data[0].d)},${Y(0)}Z`, fill: accent, "fill-opacity": 0.12, stroke: "none" }, svg);
-      el("path", { d: line, fill: "none", stroke: accent, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+      // Both series drawn from zero; CurseForge is overlaid (dotted), not stacked.
+      const path = (key) => data.map((p, i) => `${i ? "L" : "M"}${X(p.d).toFixed(1)},${Y(p[key] ?? 0).toFixed(1)}`).join("");
+      const base = `L${X(data[data.length - 1].d)},${Y(0)}L${X(data[0].d)},${Y(0)}Z`;
+      const line = path("v");
+      el("path", { d: line + base, fill: accent, "fill-opacity": 0.12, stroke: "none" }, svg);
+      if (hasCf) {
+        const cfLine = path("cf");
+        el("path", { d: cfLine + base, fill: amber, "fill-opacity": 0.1, stroke: "none" }, svg);
+        el("path", { d: line, fill: "none", stroke: accent, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+        el("path", { d: cfLine, fill: "none", stroke: amber, "stroke-width": 2, "stroke-dasharray": "1.5 4", "stroke-linecap": "round" }, svg);
+      } else {
+        el("path", { d: line, fill: "none", stroke: accent, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+      }
 
-      const peak = data.reduce((a, b) => (b.v > a.v ? b : a));
+      // Legend, top left.
+      [["Modrinth", accent, null], ...(hasCf ? [["CurseForge", amber, "1.5 4"]] : [])].reduce((x, [name, color, dash]) => {
+        el("line", { x1: x, x2: x + 16, y1: 11, y2: 11, stroke: color, "stroke-width": 2.5, "stroke-linecap": "round", ...(dash ? { "stroke-dasharray": dash } : {}) }, svg);
+        const t = el("text", { x: x + 22, y: 15, fill: muted, "font-size": 11, "font-family": "Martian Mono, monospace" }, svg);
+        t.textContent = name;
+        return x + 22 + name.length * 7.5 + 18;
+      }, m.l);
+
       el("circle", { cx: X(peak.d), cy: Y(peak.v), r: 4.5, fill: accent, stroke: css("--crt"), "stroke-width": 2 }, svg);
       const pl = el("text", { x: X(peak.d) - 10, y: Y(peak.v) - 10, "text-anchor": "end", fill: ink, "font-size": 12, "font-family": "Martian Mono, monospace", "font-weight": 500 }, svg);
       pl.textContent = `${peak.v.toLocaleString()} / week`;
+      if (cfPeak) {
+        const cx = X(cfPeak.d), cy = Y(cfPeak.cf), right = cx + 90 < W;
+        el("circle", { cx, cy, r: 3.5, fill: amber, stroke: css("--crt"), "stroke-width": 2 }, svg);
+        // On narrow screens the label lands on both lines; the dot and tooltip are enough there.
+        const cl = small ? null : el("text", { x: right ? cx + 8 : cx - 8, y: cy + 18, "text-anchor": right ? "start" : "end", fill: ink, "font-size": 12, "font-family": "Martian Mono, monospace", "font-weight": 500 }, svg);
+        if (cl) cl.textContent = cfPeak.cf.toLocaleString();
+      }
       const early = data.find((p) => p.d.getFullYear() === 2025 && p.d.getMonth() === 11 && p.d.getDate() > 20);
       if (early && !small) {
         const el2 = el("text", { x: X(early.d), y: Y(early.v) - 12, "text-anchor": "middle", fill: muted, "font-size": 11, "font-family": "Martian Mono, monospace" }, svg);
@@ -815,6 +846,7 @@
 
       const cross = el("line", { y1: m.t, y2: m.t + ih, stroke: muted, "stroke-width": 1, "stroke-dasharray": "3 3", visibility: "hidden" }, svg);
       const dot = el("circle", { r: 4.5, fill: accent, stroke: css("--crt"), "stroke-width": 2, visibility: "hidden" }, svg);
+      const cfDot = el("circle", { r: 3.5, fill: amber, stroke: css("--crt"), "stroke-width": 2, visibility: "hidden" }, svg);
       const hit = el("rect", { x: m.l, y: m.t, width: iw, height: ih, fill: "transparent" }, svg);
       const move = (clientX) => {
         const rect = svg.getBoundingClientRect();
@@ -824,13 +856,17 @@
         const px = X(best.d), py = Y(best.v);
         cross.setAttribute("x1", px); cross.setAttribute("x2", px); cross.setAttribute("visibility", "visible");
         dot.setAttribute("cx", px); dot.setAttribute("cy", py); dot.setAttribute("visibility", "visible");
+        if (best.cf != null) { cfDot.setAttribute("cx", px); cfDot.setAttribute("cy", Y(best.cf)); cfDot.setAttribute("visibility", "visible"); }
+        else cfDot.setAttribute("visibility", "hidden");
         tip.hidden = false;
-        tip.innerHTML = `${fmtDate(best.d)}<br><b>${best.v.toLocaleString()}</b> downloads`;
+        tip.innerHTML = best.cf == null
+          ? `${fmtDate(best.d)}<br><b>${best.v.toLocaleString()}</b> downloads`
+          : `${fmtDate(best.d)}<br><b>${best.v.toLocaleString()}</b> Modrinth<br><b>${cfText(best)}</b> CurseForge`;
         const scale = rect.width / W;
         tip.style.left = `${Math.min(Math.max(px * scale, 70), rect.width - 70)}px`;
         tip.style.top = `${py * scale - 12}px`;
       };
-      const leave = () => { cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); tip.hidden = true; };
+      const leave = () => { cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); cfDot.setAttribute("visibility", "hidden"); tip.hidden = true; };
       hit.addEventListener("pointermove", (e) => move(e.clientX));
       hit.addEventListener("pointerdown", (e) => move(e.clientX));
       hit.addEventListener("pointerleave", leave);
@@ -839,25 +875,34 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(render);
     let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(render, 120); });
 
-    fetch("data/modrinth-downloads.json", { cache: "no-cache" })
+    // CurseForge has no analytics API, so data/curseforge-weekly.json is rebuilt by hand from scraped
+    // exports (see linkedin/README.md in the parent folder). Weeks it doesn't cover show as n/a.
+    const getWeeks = (url) => fetch(url, { cache: "no-cache" })
       .then((res) => (res.ok ? res.json() : null))
-      .then((json) => {
-        const weeks = json && Array.isArray(json.weeks) ? json.weeks.filter((w) => /^\d{4}-\d{2}-\d{2}$/.test(w.start) && Number.isFinite(w.downloads)) : [];
-        if (weeks.length < 4) return;
-        data = weeks.map((w) => ({ d: new Date(w.start + "T00:00:00"), v: w.downloads }));
-        fillTable();
-        render();
-        const latest = data[data.length - 1];
-        document.querySelectorAll('[data-live="latest-week"]').forEach((node) => {
-          node.textContent = latest.v.toLocaleString("en-US");
-          node.title = `Week of ${fmtDate(latest.d)}, from Modrinth analytics`;
-        });
-        if (caption && json.through) {
-          const through = new Date(json.through + "T00:00:00");
-          through.setDate(through.getDate() - 1);
-          caption.textContent = `Weekly downloads from Modrinth analytics, full weeks through ${fmtDate(through)}, refreshed daily. CurseForge downloads are not included here.`;
-        }
-      })
-      .catch(() => {});
+      .then((json) => (json && Array.isArray(json.weeks) ? { json, weeks: json.weeks.filter((w) => /^\d{4}-\d{2}-\d{2}$/.test(w.start) && Number.isFinite(w.downloads)) } : null))
+      .catch(() => null);
+    Promise.all([getWeeks("data/modrinth-downloads.json"), getWeeks("data/curseforge-weekly.json")]).then(([mr, cf]) => {
+      if (!mr || mr.weeks.length < 4) return;
+      const cfByWeek = new Map((cf ? cf.weeks : []).map((w) => [w.start, w]));
+      data = mr.weeks.map((w) => {
+        const c = cfByWeek.get(w.start);
+        return { d: new Date(w.start + "T00:00:00"), v: w.downloads, cf: c ? c.downloads : null, est: !!(c && c.estimated) };
+      });
+      fillTable();
+      render();
+      const latest = data[data.length - 1];
+      document.querySelectorAll('[data-live="latest-week"]').forEach((node) => {
+        node.textContent = latest.v.toLocaleString("en-US");
+        node.title = `Week of ${fmtDate(latest.d)}, from Modrinth analytics`;
+      });
+      if (caption && mr.json.through) {
+        const through = new Date(mr.json.through + "T00:00:00");
+        through.setDate(through.getDate() - 1);
+        const firstExport = cf && cf.json.first_exported_day ? fmtDate(new Date(cf.json.first_exported_day + "T00:00:00")) : null;
+        caption.textContent = cf
+          ? `Weekly downloads from Modrinth analytics (refreshed daily) and CurseForge's author stats (updated by hand), full weeks through ${fmtDate(through)}.${firstExport ? ` CurseForge weeks before ${firstExport} are estimated.` : ""}`
+          : `Weekly downloads from Modrinth analytics, full weeks through ${fmtDate(through)}, refreshed daily. CurseForge downloads are not included here.`;
+      }
+    });
   })();
 })();
