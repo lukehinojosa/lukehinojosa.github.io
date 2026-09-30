@@ -138,24 +138,24 @@ button.btn { font-weight: 400; line-height: 1.2; }
 .btn[aria-busy="true"] { cursor: progress; opacity: 0.75; }
 @media (max-width: 640px) { .nav .hide-sm { display: none; } .brand-name { display: none; } }
 
-/* ---------- hero: the grid ---------- */
-.hero { padding-block: clamp(28px, 5vw, 64px) clamp(44px, 7vw, 88px); }
-.crt {
+/* ---------- hero: 3D light-cycle grid (hero-race.js) ---------- */
+.hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: clamp(24px, 5vw, 60px) clamp(20px, 5vw, 60px) clamp(20px, 3vw, 32px);
-  border-radius: 14px;
-  background-color: var(--crt);
-  background-image:
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(0deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 40px 40px;
-  background-position: 0 0;
-  border: 1px solid rgba(127, 216, 255, 0.22);
-  box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.85), inset 0 0 80px rgba(40, 120, 255, 0.07);
+  padding-block: clamp(48px, 8vw, 112px) clamp(24px, 3vw, 40px);
+  /* sky: a faint cyan glow from the top, settling to near-black at the horizon.
+     hero-race.js sets --horizon to where the 3D ground actually meets the sky. */
+  --horizon: 45%;
+  background:
+    radial-gradient(ellipse 120% var(--horizon) at 50% 0%, rgba(30, 130, 150, 0.16), transparent),
+    linear-gradient(180deg, #0B2D37 0%, #041A21 var(--horizon), #030E14 var(--horizon));
+  background-color: #030E14;
 }
-.hero-race { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.hero-race { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none; }
+/* keeps the copy readable when lightning lights up the clouds behind it */
+.hero .status, .hero h1, .hero-lead { text-shadow: 0 1px 14px rgba(1, 7, 11, 0.9); }
+.hero .readout { margin-top: clamp(150px, 22vw, 300px); }
 .status {
   display: inline-flex; align-items: center; gap: 10px;
   color: var(--legend-2); line-height: 1.4;
@@ -256,6 +256,7 @@ button.btn { font-weight: 400; line-height: 1.2; }
 .project-main > h3 { order: 0; font-size: clamp(2.2rem, 4.6vw, 3.5rem); }
 .project-main > .kicker { order: 1; margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: var(--legend-2); font-size: 1.125rem; }
 .project .summary { margin: 20px 0 0; max-width: 62ch; font-size: 1.1875rem; color: var(--legend-2); }
+.project .story { margin: 14px 0 0; max-width: 62ch; color: var(--legend-2); }
 .note { margin: 14px 0 0; max-width: 78ch; font-size: 0.9375rem; color: var(--legend-dim); }
 @media (max-width: 900px) {
   .project-grid { grid-template-columns: 1fr; }

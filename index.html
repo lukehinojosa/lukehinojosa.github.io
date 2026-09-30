@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Luke Hinojosa</title>
-<meta name="description" content="Luke Hinojosa: C++ systems and game programmer. Real-time netcode, air-defense simulation, and an open-source Minecraft mod with 80,000+ downloads.">
+<meta name="description" content="Luke Hinojosa: game programmer at Champlain College. Multiplayer netcode, an air-defense simulation, and a Minecraft mod with 80,000+ downloads.">
 <meta property="og:title" content="Luke Hinojosa">
-<meta property="og:description" content="Real-time systems, built from scratch.">
+<meta property="og:description" content="Making ideas playable.">
 <meta property="og:image" content="media/ds_salvo.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,12 +34,11 @@
 
   <!-- ================= HERO ================= -->
   <section class="hero">
+    <canvas class="hero-race" aria-hidden="true"></canvas>
     <div class="wrap">
-      <div class="crt">
-      <canvas class="hero-race" aria-hidden="true"></canvas>
-      <span class="status"><i></i>Seeking a Summer 2027 internship in game or defense engineering</span>
-      <h1>Real-time systems, built from <em>scratch</em>.</h1>
-      <p class="hero-lead">I'm Luke Hinojosa, a C++ systems and game programmer at Champlain College. I work on the parts that have to be fast, deterministic, and correct: netcode that keeps two players in sync through a full second of lag, an air-defense simulation that updates 10,000 tracks in under half a millisecond, and a Minecraft mod with more than <span data-live="total-floor">80,000</span> downloads.</p>
+      <span class="status"><i></i>Game programmer from Downingtown, PA, studying at Champlain College</span>
+      <h1>Making ideas <em>playable</em>.</h1>
+      <p class="hero-lead">I'm Luke Hinojosa, a game programmer who mostly writes C++. I've made multiplayer netcode, an air-defense simulation, and a Minecraft mod that started as a favor for my friends.</p>
       <div class="hero-actions">
         <a class="btn btn-solid" href="#projects">See the projects</a>
         <a class="btn" href="mailto:lumahi@proton.me">lumahi@proton.me</a>
@@ -71,7 +70,6 @@
           <span class="label">Simple AutoPickup</span>
         </div>
       </div>
-      </div>
     </div>
   </section>
 
@@ -79,16 +77,18 @@
   <section class="section" id="about">
     <div class="wrap">
       <div class="section-head">
-        <h2>Most of what I build starts with a question about time.</h2>
+        <h2>It started at a book fair.</h2>
       </div>
       <div class="about-grid">
         <div class="prose">
-          <p>How do two players on different machines agree on where a ball is when every message arrives late? How many objects can an engine move, index, and publish inside a 16.7 ms frame, and how much of that budget is left over? I like the layer under the gameplay: the simulation loop, the wire format, the cache line.</p>
-          <p>I'm studying Game Programming at Champlain College in Burlington, Vermont. In spring 2025 I interned in the Security Operations Center at the Leahy Center for Digital Forensics &amp; Cybersecurity, where I assembled an Elastic Stack from scratch for network log aggregation and wrote up troubleshooting procedures for the rest of the team. That habit stuck. My repositories ship with design notes, profiling tables, and unit tests next to the code.</p>
-          <p>Outside the three projects below, I'm driving a mecanum robot from a Meta Quest 2 over a custom UDP protocol with stereo camera passthrough, building GOAP planners and A* pathfinding in Unity, and working through Game Physics and AI for Games this fall.</p>
-          <p>I'm looking for a summer internship on a team where real-time performance matters, whether that's a game studio or a defense program.</p>
+          <p>In fifth grade I picked up <cite>Coding Games in Scratch</cite> by Carol Vorderman at my school's Scholastic book fair, and that was it. A year later my science fair project was, looking back, my first benchmark: I timed Scratch scripts with a stopwatch to find out whether "walk 2 steps, walk 2 steps" ran slower than "walk 4 steps." I didn't know yet that Scratch throttles its own speed, or what a compiler does. I still like finding out how long things take.</p>
+          <p>Games were the first kind of programming I knew existed, and they're still why I do this. A good game gives someone somewhere else to be for a while, and I like the idea that something I made turned someone's day into a better one. My favorite part of the work is the moment something I'd only imagined starts actually running.</p>
+          <p>I grew up in Downingtown, Pennsylvania, outside Philadelphia, and went to Downingtown East. Now I'm studying Game Programming at Champlain College in Burlington, Vermont. In spring 2025 I worked in the Security Operations Center at the Leahy Center for Digital Forensics &amp; Cybersecurity, building an Elastic Stack from scratch for network logs and writing troubleshooting guides for the team. I've kept the habit of writing things down ever since.</p>
+          <p>Lately I've been driving a mecanum robot from a Meta Quest 2 over a custom UDP protocol with stereo camera passthrough, building GOAP planners and A* pathfinding in Unity, and taking Game Physics and AI for Games.</p>
+          <p>When I'm not programming, I'm usually still playing something: Minecraft, Rain World, Spore, Super Hexagon, Escape the Backrooms, Arizona Sunshine, and more shooters than I can count. Otherwise I'm catching up on shows, listening to music, or working out.</p>
         </div>
         <dl class="spec">
+          <div><dt>From</dt><dd>Downingtown, Pennsylvania<small>Downingtown East High School</small></dd></div>
           <div><dt>Education</dt><dd>B.S. Game Programming, Champlain College<small>Expected May 2028</small></dd></div>
           <div><dt>Honors</dt><dd>Trustees' List &amp; President's List, multiple semesters<small>Dean's List, Fall 2025</small></dd></div>
           <div><dt>Experience</dt><dd>Security Operations Intern, Leahy Center for Digital Forensics &amp; Cybersecurity<small>Feb 2025 to May 2025</small></dd></div>
@@ -106,8 +106,8 @@
   <section class="section" id="projects">
     <div class="wrap">
       <div class="section-head">
-        <h2>Three projects, each measured.</h2>
-        <p>Every claim below comes from a benchmark, a test suite, or a download counter. The demos run live in your browser, rebuilt from the same logic as the originals.</p>
+        <h2>Three things I've built.</h2>
+        <p>Each one started as something I wanted to exist and ended up teaching me something I didn't know yet. The demos run live in your browser, rebuilt from the same logic as the originals.</p>
       </div>
       <ul class="index">
         <li><a href="#defense"><strong>Defense Simulation</strong><span>Air-defense engine, ProNav guidance, and a 3D command-and-control display</span><em>C++17 · Raylib · Boost</em></a></li>
@@ -135,6 +135,7 @@
           <div class="label kicker">Real-Time Air Defense &amp; Telemetry Suite</div>
           <h3>Defense Simulation</h3>
           <p class="summary">A multithreaded engine that tracks hostile missiles, assigns interceptors, and guides them in with Proportional Navigation, then streams every frame to a separate 3D command-and-control display built on a real 1:1 map of Midtown Manhattan.</p>
+          <p class="story">I wanted to try the kind of work defense engineers actually do, and most of it was past what I knew. I'd never heard of IPC or ProNav, and I'd never used a test framework or a profiler beyond an FPS counter. It began as two separate projects: a missile tracker built on an octree, and two programs sharing memory. Combining them worked, but the tracker had nothing to do with what it tracked. Interceptors gave it a purpose, and learning how they're really guided led me to Proportional Navigation.</p>
 
           <div class="screen" data-tabs>
             <div class="screen-bar">
@@ -181,7 +182,7 @@
               <li><b>An octree that rebuilds 60 times a second without touching the allocator.</b><span>Nodes live in one contiguous pool and reset instead of freeing. Profiling on a Pi 4 showed allocator churn was the real cost; pooling cut frame time from 12.3 ms to 6.0 ms and L1 cache misses by 44%.</span></li>
               <li><b>A swept proximity fuze.</b><span>At Mach 3 closing speeds a round moves about 30 m per frame, so a point check tunnels straight through the target. The fuze tests closest approach across the whole step.</span></li>
               <li><b>Two telemetry transports behind one interface.</b><span>Locally, a lock-free seqlock ring in shared memory with zero allocation on publish. Remotely, UDP with a zig-zag + VLQ codec that shrinks a 30 B record to about 12 to 15 B, so the entire scene fits in one datagram.</span></li>
-              <li><b>Engineered like it will be maintained.</b><span>CMake presets for MSVC and Linux, a data-driven YAML scenario, 61 GoogleTest cases, and a clean Valgrind report: 0 bytes in use at exit.</span></li>
+              <li><b>My first real test suite and profiler.</b><span>CMake presets for MSVC and Linux, a data-driven YAML scenario, 61 GoogleTest cases, and a clean Valgrind report: 0 bytes in use at exit.</span></li>
             </ul>
             <dl class="metrics">
               <div><dt>Frame time, 10,000 entities</dt><dd>0.44<small>ms</small></dd></div>
@@ -237,6 +238,7 @@
           <div class="label kicker">Real-time multiplayer, no engine</div>
           <h3>Schrödinger's Pong</h3>
           <p class="summary">Pong is the simplest game there is, until two players are 500 ms apart. I wrote the networking from scratch in C++: a custom binary protocol, deterministic fixed-point physics shared by native and WebAssembly builds, and a prediction system where the ball splits into every possible future until the other player confirms which one happened.</p>
+          <p class="story">I knew my Network Programming final would be Pong the moment the class started. Basic online Pong feels awful for whoever isn't the host: you swing and then wait to find out if you hit. Standard multiplayer techniques didn't fix that imbalance, so I decided that in a game this unserious, each player gets to be the authority on their own paddle. That opens a window where the ball could be doing several things at once, and the other player can't know which until the packets arrive. So instead of hiding that, I show all of it, and deterministic physics gives them time to react.</p>
 
           <div class="screen">
             <div class="screen-bar">
@@ -264,7 +266,7 @@
               <li><b>Phase-locked tick pacing.</b><span>The guest estimates round-trip time continuously and nudges its simulation clock between 0.99× and 1.01× to track the host, snapping only during the countdown where a jump is invisible.</span></li>
               <li><b>Distributed authority.</b><span>Each player is authoritative over their own paddle face, which eliminates ghost hits. The Schrödinger ball bridges the gap until the peer's verdict arrives.</span></li>
               <li><b>Beating TCP head-of-line blocking.</b><span>WebSockets run over TCP, so one lost packet stalls everything behind it. Critical collision messages repeat for 30 consecutive frames instead of waiting on a retransmit.</span></li>
-              <li><b>Deployed, not just demoed.</b><span>A C++ signaling server brokers lobbies over JSON and then relays raw bytes without inspecting them. It ships in a multi-stage Docker image with automatic Let's Encrypt TLS.</span></li>
+              <li><b>Playable online, for real.</b><span>A C++ signaling server brokers lobbies over JSON and then relays raw bytes without inspecting them. It ships in a multi-stage Docker image with automatic Let's Encrypt TLS.</span></li>
             </ul>
             <dl class="metrics">
               <div><dt>Round-trip latency stress-tested</dt><dd>1,000<small>ms</small></dd></div>
@@ -320,9 +322,10 @@
         </aside>
 
         <div class="project-main">
-          <div class="label kicker">Open-source tool with a live user base</div>
+          <div class="label kicker">Made for our server, now on everyone else's</div>
           <h3>Simple AutoPickup</h3>
           <p class="summary">Items and experience go straight into your inventory the moment you break a block or defeat a mob. Simple idea, hard to do right in someone else's engine: it has to credit the correct player, survive every mod that breaks blocks its own way, and keep working as Minecraft changes underneath it.</p>
+          <p class="story">Two of my friends wanted a mod for our Minecraft server that put items straight into their inventory. I went looking and couldn't find one that did it, so I learned Fabric and Mixin and wrote it myself. It grew from there: more loaders, more versions, and bug reports from people I'd never met.</p>
 
           <div class="screen" data-tabs>
             <div class="screen-bar">
@@ -382,8 +385,8 @@
   <!-- ================= CONTACT ================= -->
   <section class="contact" id="contact">
     <div class="wrap">
-      <h2>Let's talk about summer 2027.</h2>
-      <p>If your team builds games, simulations, or systems where timing is a feature, I'd like to hear about it. The fastest way to reach me is email.</p>
+      <h2>Get in touch.</h2>
+      <p>Questions about one of these projects, a game you think I'd like, or something you're building yourself: I'd like to hear about it. Email is the fastest way to reach me.</p>
       <div class="hero-actions">
         <a class="btn btn-solid" href="mailto:lumahi@proton.me">Email lumahi@proton.me</a>
         <button class="btn" type="button" data-resume="download">Download résumé</button>
@@ -398,12 +401,13 @@
 
 <footer class="foot">
   <div class="wrap">
-    <span>© 2026 Luke Hinojosa. Hand-built HTML, CSS, and canvas. No frameworks.</span>
+    <span>© 2026 Luke Hinojosa.</span>
     <span>Map data © OpenStreetMap contributors, ODbL.</span>
   </div>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <script src="script.js"></script>
+<script type="module" src="hero-race.js"></script>
 </body>
 </html>
