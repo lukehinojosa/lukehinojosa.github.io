@@ -107,7 +107,7 @@
     <div class="wrap">
       <div class="section-head">
         <h2>Three things I've built.</h2>
-        <p>Each one started as something I wanted to exist and ended up teaching me something I didn't know yet. The demos run live in your browser, rebuilt from the same logic as the originals.</p>
+        <p>Each one started as something I wanted to exist and ended up teaching me something I didn't know yet. The demos run live in your browser.</p>
       </div>
       <ul class="index">
         <li><a href="#defense"><strong>Defense Simulation</strong><span>Air-defense engine, ProNav guidance, and a 3D command-and-control display</span><em>C++17 · Raylib · Boost</em></a></li>
@@ -123,11 +123,12 @@
           <dl>
             <div><dt>Role</dt><dd>Systems programmer, solo</dd></div>
             <div><dt>Timeline</dt><dd>August 2026</dd></div>
-            <div><dt>Stack</dt><dd>C++17, CMake, Raylib, Boost.Interprocess, GoogleTest</dd></div>
-            <div><dt>Runs on</dt><dd>Windows (MSVC) and Linux, profiled on a Raspberry Pi 4</dd></div>
+            <div><dt>Stack</dt><dd>C++17, CMake, Raylib, Boost.Interprocess, GoogleTest, Emscripten</dd></div>
+            <div><dt>Runs on</dt><dd>Windows (MSVC), Linux, and the browser (WebAssembly), profiled on a Raspberry Pi 4</dd></div>
           </dl>
           <div class="links">
             <a href="https://github.com/lukehinojosa/DefenseSimulation" target="_blank" rel="noopener">Source on GitHub</a>
+            <a href="https://lukarbonite.itch.io/defense-simulation" target="_blank" rel="noopener">Play on itch.io</a>
           </div>
         </aside>
 
@@ -141,14 +142,43 @@
             <div class="screen-bar">
               <span>C2 TACTICAL DISPLAY</span>
               <div class="tabs" role="tablist" aria-label="Defense Simulation views">
-                <button class="tab" role="tab" aria-selected="true" data-tab="ds-salvo">Salvo</button>
+                <button class="tab" role="tab" aria-selected="true" data-tab="ds-play">Play</button>
+                <button class="tab" role="tab" aria-selected="false" data-tab="ds-launch">Clips</button>
+                <button class="tab" role="tab" aria-selected="false" data-tab="ds-salvo">Salvo</button>
                 <button class="tab" role="tab" aria-selected="false" data-tab="ds-manhattan">Manhattan</button>
                 <button class="tab" role="tab" aria-selected="false" data-tab="ds-lod">LOD tuner</button>
-                <button class="tab" role="tab" aria-selected="false" data-tab="ds-pronav">Guidance demo</button>
               </div>
             </div>
-            <div class="panel" data-panel="ds-salvo">
-              <div class="stage"><img src="media/ds_salvo.webp" alt="C2 visualizer during a 100-threat raid: green ProNav line-of-sight lines connect interceptors to hostile missiles above the Manhattan skyline, with a HUD showing 97 active hostiles and 60 FPS." width="1280" height="720"></div>
+            <div class="panel" data-panel="ds-play">
+              <div class="stage stage-play" id="ds-play">
+                <img src="media/ds_ground_launch.jpg" alt="" width="1280" height="720">
+                <div class="play-cover">
+                  <button type="button" class="btn btn-solid" id="ds-play-btn">Run the simulation</button>
+                  <span class="hint">5 MB download &middot; needs WebGL2 &middot; works on phones</span>
+                </div>
+              </div>
+              <div class="screen-foot"><span><strong>The real engine, compiled to WebAssembly.</strong> The same C++ raid and guidance code as the native build, stepping a 100-missile raid in your browser over every building in New York City. Drag to orbit, scroll to zoom, click a missile to follow it.</span><a class="hint" href="play/defense-simulation/" target="_blank" rel="noopener">Open full page</a></div>
+            </div>
+            <div class="panel" data-panel="ds-launch" hidden>
+              <div class="stage"><video id="ds-reel" src="media/ds_ground_launch.mp4" poster="media/ds_ground_launch.jpg" muted playsinline preload="none" aria-label="Slow-motion orbit at ground level as interceptors launch from the battery and pitch over toward the incoming raid, with the Manhattan skyline compressed behind them by a long lens."></video></div>
+              <div class="screen-foot">
+                <div class="controls">
+                  <div class="seg reel" role="group" aria-label="Clip">
+                    <button type="button" aria-pressed="true" data-clip="media/ds_ground_launch" data-title="Battery launch, 0.3&times; speed." data-text="Interceptors climb out and pitch over toward the raid while green ProNav lines track every hostile, shot on a long lens that stacks the skyline behind them." data-alt="Slow-motion orbit at ground level as interceptors launch from the battery and pitch over toward the incoming raid, with the Manhattan skyline compressed behind them by a long lens.">Launch</button>
+                    <button type="button" aria-pressed="false" data-clip="media/ds_hostile_intercept" data-title="Chasing a hostile to its kill, 0.5&times; speed." data-text="The camera rides one inbound missile (red) over the East River until an interceptor's proximity fuze detonates beside it." data-alt="Follow camera on a red hostile missile flying over Manhattan and the East River until an interceptor detonates next to it in an orange blast sphere.">Hostile chase</button>
+                    <button type="button" aria-pressed="false" data-clip="media/ds_interceptor_terminal" data-title="Riding an interceptor through terminal homing, 0.5&times; speed." data-text="ProNav bends the round onto the hostile's path in the last seconds before the fuze fires." data-alt="Follow camera on a green interceptor as it turns onto a red hostile missile and detonates in an orange blast sphere above the city.">Terminal homing</button>
+                    <button type="button" aria-pressed="false" data-clip="media/ds_skyline_close" data-title="Leakers killed close in." data-text="The last hostiles to get through the outer layer are stopped above Midtown, with fuze detonations bursting over the skyline." data-alt="Low view across Manhattan as several orange proximity-fuze detonations burst in the sky above the city.">Close kills</button>
+                    <button type="button" aria-pressed="false" data-clip="media/ds_battery_launch" data-title="The battery answers the raid." data-text="Standing and on-demand launches climb out over the harbor as the engagement manager assigns a round to each threat." data-alt="Low wide view over New York Harbor as interceptor launches rise from the city and green guidance lines fan out toward the raid.">Battery</button>
+                    <button type="button" aria-pressed="false" data-clip="media/ds_raid_overview" data-title="The full raid, 1.5&times; speed." data-text="A wide orbit from launch to the first exchanges: every green line is an interceptor homing on its assigned hostile." data-alt="Wide orbiting view of the whole metro map as a dense web of green guidance lines converges over the city.">Raid</button>
+                    <button type="button" aria-pressed="false" data-clip="media/ds_city_defense_orbit" data-title="The heaviest exchange, 2&times; speed." data-text="An orbit of the defended city as the raid thins out, detonations marking each kill." data-alt="Orbiting view of the city map as green guidance lines thin out and orange detonations mark intercepts overhead.">Exchange</button>
+                    <button type="button" aria-pressed="false" data-clip="media/ds_tactical_overhead" data-title="Tactical overhead, 3&times; speed." data-text="The whole engagement from above, from a sky full of tracks to the last few intercepts." data-alt="Near top-down view of the metro map as the web of green guidance lines clears and scattered orange detonations remain.">Overhead</button>
+                  </div>
+                </div>
+                <span id="ds-reel-cap"><strong>Battery launch, 0.3&times; speed.</strong> Interceptors climb out and pitch over toward the raid while green ProNav lines track every hostile, shot on a long lens that stacks the skyline behind them.</span>
+              </div>
+            </div>
+            <div class="panel" data-panel="ds-salvo" hidden>
+              <div class="stage"><img src="media/ds_salvo.webp" alt="C2 visualizer during a 100-threat raid: green ProNav line-of-sight lines connect interceptors to hostile missiles above the Manhattan skyline, with a HUD showing 97 active hostiles and 60 FPS." width="1280" height="720" loading="lazy"></div>
               <div class="screen-foot"><span><strong>100-threat raid, 14 s in.</strong> Green lines are ProNav line-of-sight from each interceptor to its assigned hostile. HUD reads live telemetry rate and throughput.</span></div>
             </div>
             <div class="panel" data-panel="ds-manhattan" hidden>
@@ -159,22 +189,7 @@
               <div class="stage"><img src="media/ds_lodtuner.webp" alt="Wide view of New York City in the visualizer with an in-app LOD tuner panel showing distance and grid-size sliders for seven detail tiers." width="1280" height="720" loading="lazy"></div>
               <div class="screen-foot"><span><strong>In-app LOD tuner.</strong> A debug panel I built to tune seven level-of-detail tiers live while holding 60 FPS across the whole metro.</span></div>
             </div>
-            <div class="panel" data-panel="ds-pronav" hidden>
-              <div class="stage"><canvas id="pronav-canvas" width="1280" height="720" aria-label="Interactive top-down intercept demo. Click the map to launch a threat from that point."></canvas></div>
-              <div class="screen-foot">
-                <div class="controls">
-                  <div class="seg" role="group" aria-label="Guidance law">
-                    <button type="button" id="pn-mode-pronav" aria-pressed="true">ProNav</button>
-                    <button type="button" id="pn-mode-pursuit" aria-pressed="false">Pure pursuit</button>
-                  </div>
-                  <label class="ctl" for="pn-gain">N <input id="pn-gain" type="range" min="2" max="6" step="0.5" value="4"><output id="pn-gain-out" for="pn-gain">4.0</output></label>
-                  <button type="button" class="sbtn" id="pn-new">New threat</button>
-                </div>
-                <span class="hint">Click the map to launch a threat from there. Faint trails show the previous run.</span>
-              </div>
-            </div>
           </div>
-          <p class="note">The guidance demo is a 2D sketch of the engine's guidance law using the scenario's own numbers: 950 m/s threats weaving at 12 g, 1,300 m/s interceptors limited to 55 g, a 20 m swept proximity fuze.</p>
 
           <div class="body-grid">
             <ul class="built">

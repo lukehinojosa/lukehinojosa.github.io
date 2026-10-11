@@ -296,6 +296,10 @@ button.btn { font-weight: 400; line-height: 1.2; }
 .stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.8), inset 0 5px 14px rgba(0,0,0,0.45); }
 .stage > img, .stage > video, .stage > canvas { width: 100%; height: 100%; object-fit: cover; }
 .stage canvas { cursor: crosshair; touch-action: manipulation; }
+.stage-play > img { position: absolute; inset: 0; opacity: 0.55; }
+.stage-play > iframe { display: block; width: 100%; height: 100%; border: 0; }
+.play-cover { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 16px; text-align: center; }
+@media (max-width: 640px) { .stage-play { aspect-ratio: 4 / 5; } }
 .stage-pong { aspect-ratio: 800 / 644; max-width: 780px; margin-inline: auto; }
 .panel[hidden] { display: none !important; }
 .screen-foot {
@@ -306,6 +310,9 @@ button.btn { font-weight: 400; line-height: 1.2; }
 .screen-foot strong { color: var(--legend); font-weight: 700; }
 .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
 .seg { display: inline-flex; gap: 4px; }
+.controls:has(> .reel) { flex: 1 1 100%; min-width: 0; }
+.seg.reel { flex-wrap: wrap; min-width: 0; }
+.seg.reel button { white-space: nowrap; }
 .seg button {
   font-size: 0.7rem; padding: 9px 12px 8px;
   background: var(--chassis-3); color: var(--legend-2);

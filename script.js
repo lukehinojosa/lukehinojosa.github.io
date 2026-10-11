@@ -290,246 +290,6 @@
     draw();
   })();
 
-  /* ================================================================
-     ProNav intercept sketch (2D top-down)
-     Values from config/simulation.yaml: threat 950 m/s at 12 g,
-     interceptor 1300 m/s at 55 g, 60 g axial, N = 4, 20 m swept fuze,
-     batteries on an 11 km ring, 6 km protected radius.
-     ================================================================ */
-  (function pronavDemo() {
-    const canvas = document.getElementById("pronav-canvas");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const G = 9.81;
-    const VIEW = { x0: -32000, x1: 32000, y0: -6000, y1: 30000 };
-    const T_SPEED = 950, T_LAT = 12 * G;
-    const I_SPEED = 1300, I_LAT = 55 * G, I_AXIAL = 60 * G;
-    const FUZE = 20, PAD_R = 11000, PROTECT_R = 6000;
-
-    const gainInput = document.getElementById("pn-gain");
-    const gainOut = document.getElementById("pn-gain-out");
-    const bPro = document.getElementById("pn-mode-pronav");
-    const bPur = document.getElementById("pn-mode-pursuit");
-    const bNew = document.getElementById("pn-new");
-
-    let mode = "pronav";
-    let run = null, prev = null;
-    let visible = false, panelShown = false;
-
-    const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
-
-    function newRun(sx, sy) {
-      if (run && run.tTrail.length > 2) prev = { tTrail: run.tTrail, iTrail: run.iTrail };
-      let x = sx, y = sy;
-      if (x === undefined) {
-        const bearing = (Math.random() * 2 - 1) * (62 * Math.PI / 180);
-        const range = 24000 + Math.random() * 6000;
-        x = Math.sin(bearing) * range; y = Math.cos(bearing) * range;
-      }
-      const bearingToThreat = Math.atan2(x, y);
-      const pad = { x: Math.sin(bearingToThreat) * PAD_R, y: Math.cos(bearingToThreat) * PAD_R };
-      run = {
-        t: 0, done: false, doneT: 0, result: "",
-        th: { x, y, h: Math.atan2(-y, -x), alive: true, phase: Math.random() * 6.28 },
-        it: { x: pad.x, y: pad.y, h: Math.atan2(y - pad.y, x - pad.x), v: 250, launched: false, alive: true },
-        tTrail: [], iTrail: [], trailT: 0, burst: null,
-        telem: { range: 0, vc: 0, ldot: 0, acmd: 0 },
-      };
-    }
-
-    function step(dt) {
-      const r = run; if (r.done) { r.doneT += dt; if (r.doneT > 3.2) newRun(); return; }
-      r.t += dt;
-      const th = r.th, it = r.it;
-      // threat: steer toward the asset while weaving at up to 12 g
-      const toAsset = Math.atan2(-th.y, -th.x);
-      let omega = Math.max(-T_LAT / T_SPEED, Math.min(T_LAT / T_SPEED, 1.2 * wrap(toAsset - th.h)));
-      omega += (0.75 * T_LAT * Math.sin(2 * Math.PI * r.t / 4.5 + th.phase)) / T_SPEED;
-      th.h += omega * dt;
-      const tvx = Math.cos(th.h) * T_SPEED, tvy = Math.sin(th.h) * T_SPEED;
-      const t0x = th.x, t0y = th.y;
-      th.x += tvx * dt; th.y += tvy * dt;
-
-      const m0x = it.x, m0y = it.y;
-      if (!it.launched && r.t > 0.8) it.launched = true;
-      if (it.launched) {
-        it.v = Math.min(I_SPEED, it.v + I_AXIAL * dt);
-        const rx = th.x - it.x, ry = th.y - it.y;
-        const mvx = Math.cos(it.h) * it.v, mvy = Math.sin(it.h) * it.v;
-        const vrx = tvx - mvx, vry = tvy - mvy;
-        const r2 = rx * rx + ry * ry, rn = Math.sqrt(r2);
-        const ldot = (rx * vry - ry * vrx) / r2;
-        const vc = -(rx * vrx + ry * vry) / rn;
-        let a;
-        if (mode === "pronav" && it.v > 600) a = Number(gainInput.value) * vc * ldot;
-        else a = 5 * wrap(Math.atan2(ry, rx) - it.h) * it.v;
-        a = Math.max(-I_LAT, Math.min(I_LAT, a));
-        it.h += (a / it.v) * dt;
-        it.x += Math.cos(it.h) * it.v * dt; it.y += Math.sin(it.h) * it.v * dt;
-        r.telem = { range: rn, vc, ldot, acmd: Math.abs(a) / G };
-
-        // swept proximity fuze: closest approach of the relative motion over this step
-        const ax = t0x - m0x, ay = t0y - m0y;
-        const dx = (th.x - it.x) - ax, dy = (th.y - it.y) - ay;
-        const dd = dx * dx + dy * dy;
-        const u = dd > 0 ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / dd)) : 0;
-        const miss = Math.hypot(ax + dx * u, ay + dy * u);
-        if (miss <= FUZE) {
-          r.done = true; th.alive = false; it.alive = false;
-          r.burst = { x: it.x, y: it.y, t: 0 };
-          r.result = `INTERCEPT  t=${r.t.toFixed(1)} s  miss ${miss.toFixed(1)} m  ${(Math.hypot(th.x, th.y) / 1000).toFixed(1)} km from asset`;
-        }
-      }
-      if (!r.done && Math.hypot(th.x, th.y) < 500) {
-        r.done = true; th.alive = false; r.burst = { x: th.x, y: th.y, t: 0, loss: true };
-        r.result = `ASSET LOSS  t=${r.t.toFixed(1)} s`;
-      }
-      if (!r.done && r.t > 70) { r.done = true; r.result = "INTERCEPTOR FUEL EXHAUSTED"; }
-      r.trailT += dt;
-      if (r.trailT > 0.08) {
-        r.trailT = 0;
-        r.tTrail.push([th.x, th.y]);
-        if (it.launched) r.iTrail.push([it.x, it.y]);
-      }
-    }
-
-    function draw() {
-      const { w, h, dpr } = fitCanvas(canvas);
-      const sx = (x) => ((x - VIEW.x0) / (VIEW.x1 - VIEW.x0)) * w;
-      const sy = (y) => h - ((y - VIEW.y0) / (VIEW.y1 - VIEW.y0)) * h;
-      const pxPerM = w / (VIEW.x1 - VIEW.x0);
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.fillStyle = "#050C19"; ctx.fillRect(0, 0, w, h);
-
-      // grid: 2 km minor, 10 km major
-      for (let gx = -32000; gx <= 32000; gx += 2000) {
-        ctx.strokeStyle = gx % 10000 === 0 ? "rgba(80,170,255,0.2)" : "rgba(80,170,255,0.09)";
-        ctx.lineWidth = dpr; ctx.beginPath(); ctx.moveTo(sx(gx), 0); ctx.lineTo(sx(gx), h); ctx.stroke();
-      }
-      for (let gy = -6000; gy <= 30000; gy += 2000) {
-        ctx.strokeStyle = gy % 10000 === 0 ? "rgba(80,170,255,0.2)" : "rgba(80,170,255,0.09)";
-        ctx.beginPath(); ctx.moveTo(0, sy(gy)); ctx.lineTo(w, sy(gy)); ctx.stroke();
-      }
-      const font = (sz, wt = 500) => `${wt} ${sz * dpr}px 'Martian Mono', monospace`;
-      ctx.font = font(10); ctx.fillStyle = "rgba(154,161,163,0.95)"; ctx.textAlign = "left"; ctx.textBaseline = "top";
-      for (let gy = 10000; gy <= 30000; gy += 10000) ctx.fillText(`${gy / 1000} km`, 6 * dpr, sy(gy) + 3 * dpr);
-
-      // rings around the defended asset
-      const cx = sx(0), cy = sy(0);
-      ctx.setLineDash([4 * dpr, 5 * dpr]);
-      ctx.strokeStyle = "rgba(154,161,163,0.45)"; ctx.beginPath(); ctx.arc(cx, cy, PROTECT_R * pxPerM, 0, Math.PI * 2); ctx.stroke();
-      ctx.setLineDash([1.5 * dpr, 5 * dpr]);
-      ctx.strokeStyle = "rgba(154,161,163,0.3)"; ctx.beginPath(); ctx.arc(cx, cy, PAD_R * pxPerM, 0, Math.PI * 2); ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle = "#62C2D2"; ctx.fillRect(cx - 4 * dpr, cy - 4 * dpr, 8 * dpr, 8 * dpr);
-      ctx.font = font(10); ctx.textAlign = "center"; ctx.textBaseline = "top";
-      ctx.fillStyle = "rgba(230,232,226,0.85)"; ctx.fillText("DEFENDED ASSET", cx, cy + 9 * dpr);
-      ctx.textAlign = "right"; ctx.textBaseline = "middle";
-      ctx.fillStyle = "rgba(154,161,163,0.95)"; ctx.fillText("6 km protected", cx - PROTECT_R * pxPerM - 8 * dpr, cy - 22 * dpr);
-      ctx.fillStyle = "rgba(154,161,163,0.95)"; ctx.fillText("11 km battery ring", cx - PAD_R * pxPerM - 8 * dpr, cy + 22 * dpr);
-
-      const trail = (pts, color, width) => {
-        if (pts.length < 2) return;
-        ctx.strokeStyle = color; ctx.lineWidth = width * dpr; ctx.beginPath();
-        pts.forEach(([x, y], i) => (i ? ctx.lineTo(sx(x), sy(y)) : ctx.moveTo(sx(x), sy(y))));
-        ctx.stroke();
-      };
-      if (prev) { trail(prev.tTrail, "rgba(229,196,84,0.16)", 1.5); trail(prev.iTrail, "rgba(116,210,126,0.18)", 1.5); }
-      const r = run;
-      trail(r.tTrail, "rgba(229,196,84,0.8)", 1.75);
-      trail(r.iTrail, "rgba(116,210,126,0.9)", 1.75);
-
-      const glyph = (x, y, hd, color, size) => {
-        ctx.save(); ctx.translate(sx(x), sy(y)); ctx.rotate(-hd);
-        ctx.fillStyle = color; ctx.beginPath();
-        ctx.moveTo(size * dpr, 0); ctx.lineTo(-size * 0.7 * dpr, size * 0.55 * dpr); ctx.lineTo(-size * 0.7 * dpr, -size * 0.55 * dpr);
-        ctx.closePath(); ctx.fill(); ctx.restore();
-      };
-      if (r.th.alive && r.it.launched && r.it.alive) {
-        ctx.setLineDash([3 * dpr, 4 * dpr]); ctx.strokeStyle = "rgba(116,210,126,0.5)"; ctx.lineWidth = dpr;
-        ctx.beginPath(); ctx.moveTo(sx(r.it.x), sy(r.it.y)); ctx.lineTo(sx(r.th.x), sy(r.th.y)); ctx.stroke(); ctx.setLineDash([]);
-      }
-      if (r.th.alive) glyph(r.th.x, r.th.y, r.th.h, "#E5C454", 8);
-      if (r.it.alive) glyph(r.it.x, r.it.y, r.it.h, "#74D27E", 8);
-      if (r.burst) {
-        const b = r.burst; b.t += 1 / 60;
-        const rad = (6 + b.t * 60) * dpr, al = Math.max(0, 1 - b.t / 1.2);
-        ctx.strokeStyle = b.loss ? `rgba(240,90,60,${al})` : `rgba(229,196,84,${al})`;
-        ctx.lineWidth = 2 * dpr; ctx.beginPath(); ctx.arc(sx(b.x), sy(b.y), rad, 0, Math.PI * 2); ctx.stroke();
-      }
-
-      // HUD
-      const T = r.telem;
-      const lines = [
-        ["GUIDANCE", mode === "pronav" ? `PRONAV  N=${Number(gainInput.value).toFixed(1)}` : "PURE PURSUIT"],
-        ["TIME", `${r.t.toFixed(2)} s`],
-        ["RANGE", r.it.launched ? `${(T.range / 1000).toFixed(2)} km` : "--"],
-        ["CLOSING", r.it.launched ? `${Math.round(T.vc).toLocaleString()} m/s` : "--"],
-        ["LOS RATE", r.it.launched ? `${(T.ldot * 1000).toFixed(1)} mrad/s` : "--"],
-        ["ACCEL CMD", r.it.launched ? `${T.acmd.toFixed(1)} g / 55 g` : "--"],
-      ];
-      ctx.textAlign = "left"; ctx.textBaseline = "top";
-      const lh = 16 * dpr, x0 = 14 * dpr, y0 = 12 * dpr;
-      ctx.fillStyle = "rgba(5,12,25,0.85)"; ctx.fillRect(0, 0, 250 * dpr, y0 * 2 + lh * lines.length);
-      lines.forEach(([k, v], i) => {
-        ctx.font = font(11); ctx.fillStyle = "#9AA1A3"; ctx.fillText(k, x0, y0 + i * lh);
-        ctx.fillStyle = "#E6E8E2"; ctx.fillText(v, x0 + 92 * dpr, y0 + i * lh);
-      });
-      if (r.result) {
-        ctx.font = font(12, 500); ctx.textAlign = "right";
-        ctx.fillStyle = r.result.startsWith("INTERCEPT") ? "#74D27E" : "#E5C454";
-        ctx.fillText(r.result, w - 14 * dpr, 12 * dpr);
-      }
-    }
-
-    let raf = 0, last = 0, acc = 0;
-    const DT = 1 / 240;
-    function frame(now) {
-      raf = 0;
-      const el = Math.min(0.1, (now - last) / 1000); last = now;
-      acc += el;
-      while (acc >= DT) { step(DT); acc -= DT; }
-      draw();
-      if (visible && panelShown && !reduceMotion) raf = requestAnimationFrame(frame);
-    }
-    const kick = () => {
-      if (reduceMotion) { draw(); return; }
-      if (!raf && visible && panelShown) { last = performance.now(); raf = requestAnimationFrame(frame); }
-    };
-    const setMode = (m) => {
-      mode = m;
-      bPro.setAttribute("aria-pressed", String(m === "pronav"));
-      bPur.setAttribute("aria-pressed", String(m === "pursuit"));
-      gainInput.disabled = m !== "pronav";
-      newRun(); draw();
-    };
-    bPro.addEventListener("click", () => setMode("pronav"));
-    bPur.addEventListener("click", () => setMode("pursuit"));
-    gainInput.addEventListener("input", () => { gainOut.textContent = Number(gainInput.value).toFixed(1); });
-    gainInput.addEventListener("change", () => { newRun(); draw(); });
-    bNew.addEventListener("click", () => { newRun(); draw(); if (reduceMotion) runInstant(); });
-    canvas.addEventListener("click", (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = VIEW.x0 + ((e.clientX - rect.left) / rect.width) * (VIEW.x1 - VIEW.x0);
-      const y = VIEW.y1 - ((e.clientY - rect.top) / rect.height) * (VIEW.y1 - VIEW.y0);
-      if (Math.hypot(x, y) < 13000) return;
-      newRun(x, y); draw(); if (reduceMotion) runInstant();
-    });
-    function runInstant() {
-      // reduced motion: compute the whole engagement, show the final frame
-      for (let i = 0; i < 240 * 75 && !run.done; i++) step(DT);
-      draw();
-    }
-    newRun();
-    tabListeners.push((root, id) => {
-      if (!root.contains(canvas)) return;
-      panelShown = id === "ds-pronav";
-      if (panelShown) { if (reduceMotion) runInstant(); kick(); }
-    });
-    onScreen(canvas, (v) => { visible = v; kick(); });
-    window.addEventListener("resize", () => { if (panelShown) draw(); });
-  })();
-
   /* ---------------- résumé: fetched live, phone redacted in the browser ---------------- */
   (function resume() {
     const DOC_URL = "https://docs.google.com/document/d/1BwLKBQoat5y6sN8KNoNR2Y0Lccy53WdkXFKv1iRZjPY/export?format=pdf";
@@ -686,19 +446,60 @@
     buttons.forEach((b) => b.addEventListener("click", () => run(b)));
   })();
 
-  /* ---------------- AutoPickup videos ---------------- */
-  (function videos() {
-    const vids = [...document.querySelectorAll("#autopickup video")];
+  /* ---------------- Defense Simulation: in-browser build ---------------- */
+  (function playSim() {
+    const stage = document.getElementById("ds-play");
+    const btn = document.getElementById("ds-play-btn");
+    if (!stage || !btn) return;
+    // Load on demand: the wasm build and city map are about 5 MB.
+    btn.addEventListener("click", () => {
+      const frame = document.createElement("iframe");
+      frame.src = "play/defense-simulation/";
+      frame.title = "Defense Simulation, running in the browser";
+      frame.allow = "fullscreen";
+      frame.allowFullscreen = true;
+      stage.replaceChildren(frame);
+      frame.focus();
+    });
+  })();
+
+  /* ---------------- Defense Simulation clip reel ---------------- */
+  (function clipReel() {
+    const video = document.getElementById("ds-reel");
+    const cap = document.getElementById("ds-reel-cap");
+    if (!video || !cap) return;
+    const buttons = [...document.querySelectorAll("[data-clip]")];
+    let current = 0;
+    const show = (i, play) => {
+      current = (i + buttons.length) % buttons.length;
+      const b = buttons[current];
+      buttons.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      video.src = `${b.dataset.clip}.mp4`;
+      video.poster = `${b.dataset.clip}.jpg`;
+      video.setAttribute("aria-label", b.dataset.alt);
+      const strong = document.createElement("strong");
+      strong.textContent = b.dataset.title;
+      cap.replaceChildren(strong, ` ${b.dataset.text}`);
+      if (play) video.play().catch(() => {});
+    };
+    buttons.forEach((b, i) => b.addEventListener("click", () => show(i, !reduceMotion)));
+    // Play the reel straight through, wrapping back to the first clip.
+    video.addEventListener("ended", () => show(current + 1, !reduceMotion));
+  })();
+
+  /* ---------------- tabbed videos (Defense Simulation, AutoPickup) ---------------- */
+  document.querySelectorAll(".screen").forEach((screen) => {
+    const vids = [...screen.querySelectorAll("video")];
+    if (!vids.length) return;
     let visible = false;
     const sync = () => vids.forEach((v) => {
       const shown = !v.closest(".panel").hidden;
       if (shown && visible && !reduceMotion) { v.play().catch(() => {}); } else { v.pause(); }
       if (reduceMotion) v.controls = true;
     });
-    tabListeners.push((root) => { if (root.closest("#autopickup")) sync(); });
-    const screen = document.querySelector("#autopickup .screen");
-    if (screen) onScreen(screen, (v) => { visible = v; sync(); });
-  })();
+    tabListeners.push((root) => { if (root === screen) sync(); });
+    onScreen(screen, (v) => { visible = v; sync(); });
+  });
 
   /* ---------------- live download counts ---------------- */
   (function liveDownloads() {
