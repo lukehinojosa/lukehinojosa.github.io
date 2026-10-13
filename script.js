@@ -592,7 +592,7 @@
 
       for (let v = 0; v <= yMax; v += step) {
         el("line", { x1: m.l, x2: m.l + iw, y1: Y(v), y2: Y(v), stroke: rule, "stroke-width": v === 0 ? 1.25 : 1 }, svg);
-        const t = el("text", { x: m.l - 8, y: Y(v) + 4, "text-anchor": "end", fill: muted, "font-size": 11, "font-family": "Martian Mono, monospace" }, svg);
+        const t = el("text", { x: m.l - 8, y: Y(v) + 4, "text-anchor": "end", fill: muted, "font-size": 11, "font-family": "Merriweather, Georgia, serif" }, svg);
         t.textContent = v === 0 ? "0" : v >= 1000 ? `${+(v / 1000).toFixed(1)}k` : String(v);
       }
       const months = [];
@@ -603,7 +603,7 @@
         const showYear = d.getFullYear() !== lastYear; lastYear = d.getFullYear();
         const x = X(d);
         el("line", { x1: x, x2: x, y1: m.t + ih, y2: m.t + ih + 5, stroke: muted, "stroke-width": 1 }, svg);
-        const t = el("text", { x, y: m.t + ih + 20, "text-anchor": "middle", fill: muted, "font-size": 11, "font-family": "Martian Mono, monospace" }, svg);
+        const t = el("text", { x, y: m.t + ih + 20, "text-anchor": "middle", fill: muted, "font-size": 11, "font-family": "Merriweather, Georgia, serif" }, svg);
         t.textContent = showYear ? d.toLocaleDateString("en-US", { month: "short", year: "numeric" }) : d.toLocaleDateString("en-US", { month: "short" });
       });
 
@@ -624,24 +624,24 @@
       // Legend, top left.
       [["Modrinth", accent, null], ...(hasCf ? [["CurseForge", amber, "1.5 4"]] : [])].reduce((x, [name, color, dash]) => {
         el("line", { x1: x, x2: x + 16, y1: 11, y2: 11, stroke: color, "stroke-width": 2.5, "stroke-linecap": "round", ...(dash ? { "stroke-dasharray": dash } : {}) }, svg);
-        const t = el("text", { x: x + 22, y: 15, fill: muted, "font-size": 11, "font-family": "Martian Mono, monospace" }, svg);
+        const t = el("text", { x: x + 22, y: 15, fill: muted, "font-size": 11, "font-family": "Merriweather, Georgia, serif" }, svg);
         t.textContent = name;
         return x + 22 + name.length * 7.5 + 18;
       }, m.l);
 
       el("circle", { cx: X(peak.d), cy: Y(peak.v), r: 4.5, fill: accent, stroke: css("--crt"), "stroke-width": 2 }, svg);
-      const pl = el("text", { x: X(peak.d) - 10, y: Y(peak.v) - 10, "text-anchor": "end", fill: ink, "font-size": 12, "font-family": "Martian Mono, monospace", "font-weight": 500 }, svg);
+      const pl = el("text", { x: X(peak.d) - 10, y: Y(peak.v) - 10, "text-anchor": "end", fill: ink, "font-size": 12, "font-family": "Merriweather, Georgia, serif", "font-weight": 500 }, svg);
       pl.textContent = `${peak.v.toLocaleString()} / week`;
       if (cfPeak) {
         const cx = X(cfPeak.d), cy = Y(cfPeak.cf), right = cx + 90 < W;
         el("circle", { cx, cy, r: 3.5, fill: amber, stroke: css("--crt"), "stroke-width": 2 }, svg);
         // On narrow screens the label lands on both lines; the dot and tooltip are enough there.
-        const cl = small ? null : el("text", { x: right ? cx + 8 : cx - 8, y: cy + 18, "text-anchor": right ? "start" : "end", fill: ink, "font-size": 12, "font-family": "Martian Mono, monospace", "font-weight": 500 }, svg);
+        const cl = small ? null : el("text", { x: right ? cx + 8 : cx - 8, y: cy + 18, "text-anchor": right ? "start" : "end", fill: ink, "font-size": 12, "font-family": "Merriweather, Georgia, serif", "font-weight": 500 }, svg);
         if (cl) cl.textContent = cfPeak.cf.toLocaleString();
       }
       const early = data.find((p) => p.d.getFullYear() === 2025 && p.d.getMonth() === 11 && p.d.getDate() > 20);
       if (early && !small) {
-        const el2 = el("text", { x: X(early.d), y: Y(early.v) - 12, "text-anchor": "middle", fill: muted, "font-size": 11, "font-family": "Martian Mono, monospace" }, svg);
+        const el2 = el("text", { x: X(early.d), y: Y(early.v) - 12, "text-anchor": "middle", fill: muted, "font-size": 11, "font-family": "Merriweather, Georgia, serif" }, svg);
         el2.textContent = `${early.v} / week`;
       }
 
